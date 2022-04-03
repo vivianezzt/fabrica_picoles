@@ -1,0 +1,23 @@
+Banco de Dados - Relacional (DER)
+Human Resources (HR) Schema - Recursos Humanos
+
+Banco de Dados Objeto Relacional -  um sistema de gerenciamento de BD Obj.-Realcional é similar ao SGBD, suporta objetos, classes e heranças nos schemas do BD e nas instruções SQL.
+
+AQL - Strutured Query Language -  conjunto de instruções ou comandos para manipular dados em bancos de dados relacionais. Foi Desenvolvida em 1970 pela IBM e padronizada pelo ANSI em 1986;
+
+As intruções são divididas em 4 grupos:
+
+DML(Dta Manipulation Language)  para selecionar e atualizar dados- SELECT, INSERT, UPDATE, DELETE e MERGE;
+DDL (Data Definition Language) para criar, alterar, apagar objetos - CREATE, ALTER, DROP, RENAME, TRUNCATE e COMMENT;
+DCL ( Data Control Languege)  dar e retirar privilégios dos usuarios - GRANT e REVOKE;
+TRANSACTION CONTROL para finalizar as transações - COMMIT, ROLLBACK E SAVEPOINT;
+
+
+Projeção e Seleção
+
+Projeção: colunas de uma ou mais tabelas a serem recuperadas = lista de colunas
+Seleção: linhas de uma ou mais tabelas a serem recuperadas = filtro de linhas
+
+
+
+
