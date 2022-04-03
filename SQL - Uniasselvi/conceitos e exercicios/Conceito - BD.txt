@@ -18,6 +18,227 @@ Projeção e Seleção
 Projeção: colunas de uma ou mais tabelas a serem recuperadas = lista de colunas
 Seleção: linhas de uma ou mais tabelas a serem recuperadas = filtro de linhas
 
+================================================================================
+
+DQL - Dta Query Language - no subgrupo DQL temos apenas um comando SQL - SELECT utilizado para consultar dados no BD
+
+   SELECT * FROM TIPOS_PRODUTOS = seleciona todos (*) os dados da tabela tipos_produtos
+
+   SELECT CODIGO, DESCRICAO, CODIGO_TIPO = teremos como resultado as 4 linhas da tabela 'produtos' com os dados 3 colunas solicitadas juntamente com uma mensagem de sucesso.
+
+pode ser declarado um alias = SELECT P.CODIGO AS COD, P.DESCRICAO AS DESC, P.PRECO AS PRE, P.CODIGO AS CTP FROM PRODUTOS AS P;
+
+================================================================================
+DML - Data Manipulation Language
+ 
+Comandos do subgrupo SQL - DML:
+INSERT: Usado para inserir um registro a uma tabela existente;
+UPDATE: Uasado para alterar valores de dados em um ou mais registros de uma tabela;
+DELETE: usado para remover registros de uma tabela;
+
+ - INSERT INTO TIPOS_PRODUTOS (DESCRICAO) VALUES (DESCRICAO)
+ - INSERT INTO PRODUTOS(DESCRICAO, PRECO, CODIGO_PRODUTOS) VALUES('NOTEBOOK', 1200, 1);
+
+- UPDATE TIPOS_PRODUTOS SET DESCRICAO = 'NOTEBOOK' WHERE CODIGO = 3;
+
+- DELETE FROM TIPOS_PRODUTOS WHERE CODIGO = 3;
+
+
+================================================================================
+
+DDL Data Definition Language
+
+Comandos do subgrupo SQL DDl é utilizado para criar, alterar e excluir bancos de dados, tabelas e elementos associados como indice e visão.
+
+- CREATE: cria uma banco de dados, tabelas e outros onjetos em um banco de dados;
+- ALTER: Usado para alterar a estrutura de tabelas ou outro objeto em um banco de dados;
+- DROP: Usado para apagar banco de dados, tabelas e outros objetos;
+
+ex: CREATE DATABASE financeiro;
+      CREATE TABLE tipos_produto - cria uma tabela no BD;
+      ALTER TABLE tipos_produtos ADD peso DECIMAL(8,2);
+     DROP TABLE tipos_produtos;
+
+================================================================================
+
+DCL - Data Control Language
+
+Este subgrupo de linguagem SQL é utilizado para controlar os aspectos de autorização de dados e licenças de usuarios para controlar quem tem acesso para manipular dados dentro do BD.
+
+- GRANT: usado para autorizar um ususario a executar ou setar operações no banco de dados
+- REVOKE: usado para remover ou restringir a capacidade de um usuario de executar operações.
+
+ex: GRANT SELECT ON ripos_produtos TO viviane;
+
+================================================================================
+
+DTL - Data Transaction Language
+
+- BEGIN: usado para marcar o começo de uma transação que pode ser completada ou não
+- COMMIT: finaliza uma transação
+- ROLLBACK: faz com que as mudanças nos dados existentes deste ultimo COMMIT sejam descartadas.
+
+EX: CREATE TABLE 'tipos_produtos' (codigo INT PRIMARY KEY, descricao VARCHAR(50)
+        BEGIN TRANSACTION;
+	INSERT INTO tipos_produtos VALUES ('Notebook');
+	INSRET INTO tipos_produtos VALUES ('Nobreak');
+         ROOLBACK;
+
+================================================================================
+Junção de tabelas: é uma junção entre duas tabelas que origina uma terceira tabela constituida por todos os elementos da primeira combinadas com todos os elementos da segunda.
+ex: SELECT * FROM profissoes, clientes; - retorna as duas tabelas declaradas
+
+junção de produto cartesiano: quando selecionamos todos os dados da tabela profissoes e clientes dessa forma:
+
+SELECT c.id, c.nome, c.data_nascimento, c.telefone, p.cargo FROM clientes AS c, profissoes AS p WHERE c.id_profissoes AS p WHERE c.id_profissao = p.id;
+
+Junção interna (INNER JOIN)  é caracterizada por uma consulta que retorna apenas os dados que atendem as condiçoes de junção, isto é, quais linhas de uma tabela se relaciona com as linhas de outras tabelas.
+para isso usamos a clausula ON que é semelhante a clausula WHERE.
+
+ex: SELECT c.id, c.nome, c.data_nascimento, c.telefone, p.cargo FROM clientes AS c INNER JOIN profissoes AS p ON c.id_profissao = p.id; 
+
+junção externa (OUTER JOIN) é uma consulta que nao requer que os registros de uma tabela possua registros equivalentes em outra. Esse tipo de junção se subdivide dependendo da tabela que não possuem correspondencia: a tabela da esquerda, direita ou ambas.
+(LEFT OUTER JOIN)
+
+SELECT * FROM clientes lEFT OUTER JOIN profissoes ON cliente.od_profissao = profissoes.id;
+
+junção externa (RIGHT OUTER JOIN) é uma consulta inversa da anterior, mesmo se nao existir um registro correspondente a tabela esquerda o valor retorna como NULL.
+
+junção externa (FULL OUTER JOIN) faz referencias aos dois lados da tabelas a esuqerda e direita, retornando valor NULL caso não tenha correspondencia.
+
+ex: SELECT * FROM clientes LEFT OUTER JOIN profissoes ON clientes.id_profissao = profissao.od UNION SELECT * FROM clientes RIGHT OUTER JOIN profissoes ON Clientes.id_profissao = profissao.id
+
+junção cruzada (CROSS JOIN) essa consulta é usada quando queremos juntar duas ou mais tabelas por cruzamentos, ou seja, para cada linha de tabela queremos todos os dados da outra tabela ou vice-versa.
+
+EX: SELECT * FROM c.id, c.nome, c.data_nascimento, c.telefone, p.cargo FROM clientes AS c CROSS JOIN profissoes AS p;
+
+auto junção (SELF JOIN) esta consulta é uma auto junção de uma tabela a si mesma  populando a tabela introduzindo dados com INSERT TO
+
+ex: SELECT  a.nome AS consumidor1, b.nome AS consumidor2, a.cidade FROM consumidor AS b ON a.id <> b.id AND a,cidade = b.cidade - os ids sao diferentes mas a cidade é igual.
+
+junção EQUI_JOIN é um tipo especifico de junçãp baseada em comparador que usa apenas comparações de igualdade na junção
+
+ex: SELECT * FROM clientes JOIN profissoes ON cliente.id_profissao = profissao.id
+
+
+junção natural (NATURAL JOIN) essa junção é um caso especial de EQUI-JOIN o resultado desta junção é o conjunto de todas as combinações que são iguais em seus nomes de atributos comuns.
+
+ex: SELECT * FROM clientes NATURAL JOIN profissoes;
+onde há campos comuns, essa função so funciona bem se os campos chaves (onde ocorre os relacionamentos) tiverem o mesmo nome em ambas as tabelas.
+
+================================================================================
+
+FUNÇÃO DE GRUPAMENTO E ORDENAÇÃO - para agrupar e ordenar os dados do BD
+
+Utilizamos a clausula GROUP BY para agrupar elementos do mesmo tipo;
+
+ex: SELECT t.mome AS Tipo, SUM(p.quantidade) AS 'Quantidade em estoque' FROM tipos AS t, produtos AS p WHERE t.id = p.id_tipo GROUP BY t.nome
+
+Acima estamos solicitando a quantidade de produtos em estique agrupadas pelo tipo, usamos a função de agregação SUM para efeturar a soma de cada tipo de produto.
+A clausula ORDER BY organiza os ddos em ordem alfabetica ou numerica
+a ordenação pode ser ASC(ascendentem) ou DESC(descendente) por padrão é ASC ou seja do menor para o maior
+
+ex: SELECT id, nome, id_tipo, id_fabricante, qunatidade FROM produtos ORDER BY id ASC;
+
+
+================================================================================
+
+FUNÇÃO DATA E HORA 
+
+- CURDATE - SELECT CURDATE () AS 'Data Atual' dessa forma estamos selecionando a data atual
+
+- CURTIME (hora corrente) retorna hora atual SELECT CURTIME () AS 'Hora Atual';
+
+- CURRENT_TIME : SELECT CURRENT_TIME () AS 'Hora atual'
+
+- DATE_ADD (data, intervalo) adicina o intervalo na data - SELECT DATE_ADD(CURDATE(), 
+
+- INTERVAL 3 DAY) AS 'Data de venciemnto' - estamos adicionando 3 dias na data atual;
+
+- DATE_SUB (data, intervalo) subtrai um intervalo á data. A data pode ser uma data seguida de um horario, o intervalo a ser subtraido pode ser em dias, diasm e horas e minutos, dias e segundos, minutos e segundos.
+
+ex: SELECT DATE_SUB(CURDATE(), INTERVAL 10 DAY) AS 'Data de matricula';
+
+DATEDIFF(expressao1, expressao2) retorna o valor da diferença entre 'expressao1' e 'expressao2' podendo ambos serem uma data ou data e horario;
+
+DATE_FORMAT(data, formato) retornamos a data atual formatada no padrao dd/mm/yy;
+
+ex: SELECT DATE_FORMAT(CURDATE(), '%d,%m,%y') AS 'Data formatada';
+
+DAYNAME(data) com o comando acima temos o dia da semana da data corrente
+ex: SELECT DAYNAME(CURDATE()) AS 'Dia da semana';
+
+para idioma portugues: SET Ic_time_names = 'pt-BR'; SELECT DAYNAME(CURDATE()) AS 'Dia da semana';
+
+DAYOFMONTH(data) retorna o dia do mes para a data corrente
+ex: SELECT DAYOFMONTH(CURDATE()) AS 'Dia do mes' 
+
+DAYOFWEEK(data) dia da semana 
+ex: SELECT DAYOFWEEK(CURDATE()) AS "Dia da semana'
+retorna o dia da semana 1 para domingo, 2 para segunda....
+
+DAYOFYEAR(data) retorna o dia do ano como referencia 365 dias 
+ex: SELECT DAYOFYEAR(CURDATE()) AS "dia do ano';
+
+FROM_DAYS(n) nesse comando transformamos a numeração informada em dias para uma data referente a numeração (calendario gregoriano)
+ex: SELECT FROM_DAYS (780500) AS 'Data real';
+
+NOW() retorna a data e hora atual
+ex: SELECT NOW() AS "Data/hora atual';
+para o portugues: SELECT DATE_FORMAT(NOW(), '%d/%m/%y %h:%m:%s') AS 'Data/hora atual';
+
+CURRENT_TIMESTAMP() essa função faz o mesmo que NOW() selecionamos a data e hora atual
+
+TIME() serve para extrair a hora do timestamp corrente
+ex: SELECT TIME(CURRENT_TIMESTAMP()) AS 'hora';
+
+SEC_TO_TIME(segundos) converte os segundos para um tempo em horas, minutos e segundos
+ex: SELECT SEC_TO_TIME(2000) AS 'Tempo Total'; = 00:33:20
+
+TIME_TO_SEC(hora) converte a hora em segundos
+ex: SELECT TIME_TO_SEC('00:32:44') AS 'Em segundos';
+
+HOUR(hora), MINUTE(hora), SECOND(hora) retorna a hora, minuto e segundo recebida como parametro
+ex: SELECT HOUR('12:30:54') AS hora, MINUTE(12:30:54') AS Minutos, SECOND('12:30:54') AS Segundos;
+
+PERIOD_DIFF(periodo1, periodo2) retorna o numero de meses entre dois periodos que devem estar no formato AAMM ou AAAAMM
+ex: SELECT period_diff(201912, 291803) AS 'Meses restantes';
+
+TIME_DIFF(hora1, hora2) calcula a diferença entre a hora1 e a hora2
+ex: SELECT TIMEDIFF('12:35:34', '12:30:46') AS Diferença;
+
+QUARTER(data) retorna o trimestre do ano para a data 
+ex: SELECT QUARTER('2019-03-17') AS 'Trimestre do ano';
+
+WEEK(data) Retorna a semana do ano para a data.
+ex: SELECT WEEK('2019-03-17') AS 'Semana do Ano';
+
+WEEKDAY(data) Retorna o dia da semana que inicia com segunda-feira para uma data.
+ex: SELECT WEEKDAY('2019-03-17') AS 'Dia da Semana';
+
+YEAR(data) Retorna o ano de uma data.
+ex: SELECT YEAR('2019-03-17') AS 'Ano';
+
+MONTH(data) Retorna o mês de uma data.
+ex: SELECT MONTH('2019-03-17') 
+
+DAY(data) Retorna o dia de uma data.
+ex: SELECT DAY('2019-03-17') AS 'Dia';
+
+
+================================================================================
+
+SUBCONSULTAS
+
+Contextualizando... De forma geral, grande parte das consultas realizadas embancos de dadospodemserresolvidas de forma simples. Toda via, existem casos que é necessário aumentar a complexidade destas consultas,atémesmo para facilitar o resultado final e melhorar a leitura destas consultas. É aqui que entram as Subconsultas, conhecidas também como Subqueries. Uma subconsulta nada mais é do que uma instrução SELECT dentro de outro SELECTqueretorna algumas colunas específicas que são usadas em algumas funções como INSERT e UPDATE e DELETE por exemplo
+
+
+SELECT nome, sobrenome FROM funcionarios WHERE id_escritorio IN (SELECT id FROM escritorios WHERE pais = 'Brasil');
+
+No exemplo acima, estamos selecionando os campos 'nome' e 'sobrenome' databeladefuncionário onde o id do escritório esteja dentro do resultado da subconsulta. Quando a consulta é executada, a subconsulta é executada primeiro e retornaumconjuntoderesultados. Em seguida, esse conjunto de resultados é usado como uma entradadaconsultaexterna.
+
+SELECT nome, sobrenome FROM funcionarios, escritorios AS e WHERE id_escritorio = e.id AND e.pais ='Brasil';
+No exemplo acima, estamos efetuando a mesma consulta anterior semutilizar subquery.
 
 
 
